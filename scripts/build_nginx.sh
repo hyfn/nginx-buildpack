@@ -10,10 +10,12 @@
 # this dyno's directory structure to download the nginx binary.
 
 NGINX_VERSION=${NGINX_VERSION-1.11.12}
-PCRE_VERSION=${PCRE_VERSION-8.37}
-HEADERS_MORE_VERSION=${HEADERS_MORE_VERSION-0.26}
+PCRE_VERSION=${PCRE_VERSION-8.40}
+HEADERS_MORE_VERSION=${HEADERS_MORE_VERSION-0.32}
+ZLIB_VERSION=${ZLIB_VERSION-1.2.11}
 
 nginx_tarball_url=http://nginx.org/download/nginx-${NGINX_VERSION}.tar.gz
+headers_more_url=https://github.com/openresty/headers-more-nginx-module/archive/v${HEADERS_MORE_VERSION}.tar.gz
 pcre_tarball_url=ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre/pcre-${PCRE_VERSION}.tar.gz
 zlib_url=http://zlib.net/zlib-${ZLIB_VERSION}.tar.gz
 
@@ -29,6 +31,9 @@ echo "Temp dir: $temp_dir"
 echo "Downloading $nginx_tarball_url"
 curl -L $nginx_tarball_url | tar xzv
 
+echo "Downloading $headers_more_url"
+curl -L $headers_more_url | tar xzv
+
 echo "Downloading $pcre_tarball_url"
 (cd nginx-${NGINX_VERSION} && curl -L $pcre_tarball_url | tar xvz )
 
@@ -42,10 +47,10 @@ echo "Downloading $zlib_url"
     --with-zlib=zlib-${ZLIB_VERSION} \
     --prefix=/tmp/nginx \
     --with-http_gzip_static_module \
-    --add-module=/${temp_dir}/nginx-${NGINX_VERSION}/headers-more-nginx-module-${HEADERS_MORE_VERSION} \
+    --add-module=/${temp_dir}/headers-more-nginx-module-${HEADERS_MORE_VERSION} \
     --with-http_v2_module \
     --with-http_ssl_module \
-    --with-http_stub_status_module
+    --with-http_stub_status_module \
     --with-cc-opt='-g -O2 -fstack-protector --param=ssp-buffer-size=4 -Wformat -Werror=format-security -Wp,-D_FORTIFY_SOURCE=2' \
     --with-ld-opt='-Wl,-Bsymbolic-functions -Wl,-z,relro -Wl,--as-needed'
 
