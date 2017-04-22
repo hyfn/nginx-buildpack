@@ -13,11 +13,13 @@ NGINX_VERSION=${NGINX_VERSION-1.11.12}
 PCRE_VERSION=${PCRE_VERSION-8.40}
 HEADERS_MORE_VERSION=${HEADERS_MORE_VERSION-0.32}
 ZLIB_VERSION=${ZLIB_VERSION-1.2.11}
+NCHAN_VERSION=${NCHAN_VERSION-1.1.3}
 
 nginx_tarball_url=http://nginx.org/download/nginx-${NGINX_VERSION}.tar.gz
 headers_more_url=https://github.com/openresty/headers-more-nginx-module/archive/v${HEADERS_MORE_VERSION}.tar.gz
 pcre_tarball_url=ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre/pcre-${PCRE_VERSION}.tar.gz
 zlib_url=http://zlib.net/zlib-${ZLIB_VERSION}.tar.gz
+nchan_url=https://github.com/slact/nchan/archive/v${NCHAN_VERSION}.tar.gz
 
 temp_dir=$(mktemp -d /tmp/nginx.XXXXXXXXXX)
 
@@ -34,6 +36,9 @@ curl -L $nginx_tarball_url | tar xzv
 echo "Downloading $headers_more_url"
 curl -L $headers_more_url | tar xzv
 
+echo "Downloading $nchan_url"
+curl -L $nchan_url | tar xzv
+
 echo "Downloading $pcre_tarball_url"
 (cd nginx-${NGINX_VERSION} && curl -L $pcre_tarball_url | tar xvz )
 
@@ -48,6 +53,7 @@ echo "Downloading $zlib_url"
     --prefix=/tmp/nginx \
     --with-http_gzip_static_module \
     --add-module=/${temp_dir}/headers-more-nginx-module-${HEADERS_MORE_VERSION} \
+    --add-module=/${temp_dir}/nchan-${NCHAN_VERSION} \
     --with-http_v2_module \
     --with-http_ssl_module \
     --with-http_stub_status_module \
