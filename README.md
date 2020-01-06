@@ -8,7 +8,7 @@ Some application servers (e.g. Ruby's Unicorn) halt progress when dealing with n
 
 ## Versions
 
-* NGINX Version: 1.17.0
+* NGINX Version: 1.17.7
 
 ## Requirements (Proxy Mode)
 
